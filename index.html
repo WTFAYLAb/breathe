@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breathe!</title>
+
+    <style>
+        body {
+            background: #010101;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        * {
+            font-family: sans-serif;
+        }
+
+        #screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            align-content: center;
+            text-align: center;
+        }
+
+        .xxl-button {
+            border: #222 0.4vw solid;
+            font-size: 5vw;
+            background: #333;
+            color: rgb(200, 200, 200);
+            transition: transform 0.5s ease-out, box-shadow 0.8s ease-out, color 0.5s ease-out;
+            box-shadow: 0 0vw 2vw rgba(255, 255, 255, 0.1);
+        }
+
+        .xxl-button:hover {
+            color: rgb(255, 255, 255);
+            transform: scale(1.02);
+            box-shadow: 0 0vw 5vw rgba(255, 255, 255, 0.15);
+        }
+
+        .xl-button {
+            border: #222 0.4vw solid;
+            font-size: 3vw;
+            background: #333;
+            color: rgb(200, 200, 200);
+            transition: transform 0.5s ease-out, box-shadow 0.8s ease-out, color 0.5s ease-out;
+            box-shadow: 0 0vw 2vw rgba(255, 255, 255, 0.1);
+        }
+
+        .xl-button:hover {
+            color: rgb(255, 255, 255);
+            transform: scale(1.02);
+            box-shadow: 0 0vw 5vw rgba(255, 255, 255, 0.15);
+        }
+
+
+        .fadeOut {
+            transition: transform 1s ease-in, opacity 1s ease-in;
+            opacity: 0;
+            transform: scale(0.7) rotate(5deg) !important;
+        }
+
+        .breathe {
+            font-size: 6vw;
+            color: white;
+            font-family: sans-serif;
+            display: block;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(61, 16, 196, 1) 0%, rgba(17, 17, 17, 0) 45%, rgba(17, 17, 17, 0) 100%);
+            align-content: center;
+            user-select: none;
+        }
+
+        .breathe.in {
+            animation: breatheIn 7s linear forwards;
+            background: radial-gradient(circle, rgba(61, 16, 196, 1) 0%, rgba(17, 17, 17, 0) 45%, rgba(17, 17, 17, 0) 100%);
+        }
+
+        .breathe.out {
+            animation: breatheOut 7s linear forwards;
+            background: radial-gradient(circle, rgb(32, 9, 102) 0%, rgba(17, 17, 17, 0) 45%, rgba(17, 17, 17, 0) 100%);
+        }
+
+        @keyframes breatheIn {
+            0% {
+                animation-timing-function: ease-out;
+                transform: scale(0.8);
+                opacity: 0;
+            }
+
+            45% {
+                color: rgba(255, 255, 255, 1);
+            }
+
+
+            50% {
+                animation-timing-function: ease-out;
+                transform: scale(1);
+                color: rgba(255, 255, 255, 0);
+                opacity: 0.3;
+            }
+
+            55% {
+                color: rgba(255, 255, 255, 1);
+            }
+
+            75% {
+                animation-timing-function: ease-in;
+                transform: scale(1);
+                opacity: 0.3;
+            }
+
+            100% {
+                animation-timing-function: ease-in;
+                transform: scale(1.2);
+                opacity: 0;
+            }
+        }
+
+
+        @keyframes breatheOut {
+            0% {
+                animation-timing-function: ease-out;
+                transform: scale(1.2);
+                opacity: 0;
+            }
+
+            45% {
+                color: rgba(255, 255, 255, 1);
+            }
+
+            50% {
+                animation-timing-function: ease-out;
+                transform: scale(1);
+                opacity: 0.3;
+                color: rgba(255, 255, 255, 0);
+            }
+
+            55% {
+                color: rgba(255, 255, 255, 1);
+            }
+
+            75% {
+                animation-timing-function: ease-in;
+                transform: scale(1);
+                opacity: 0.3;
+            }
+
+            100% {
+                animation-timing-function: ease-in;
+                transform: scale(0.8);
+                opacity: 0;
+            }
+        }
+
+        #done {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            align-content: center;
+            text-align: center;
+            font-size: 4vw;
+            color: white;
+            font-family: sans-serif;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+    <div id="screen">
+        <button class="xxl-button" id="begin-btn" onmousedown="initiate()">begin</button>
+    </div>
+
+    <div id="done">
+        all done!<br>
+        <button class="xl-button" onmousedown="window.location.reload()">one more?</button>
+    </div>
+
+    <audio id="bgm" src="bgm.mp3" loop></audio>
+
+    <script>
+        const breathingElem = document.createElement("div");
+        breathingElem.classList.add("breathe");
+        breathingElem.classList.add("in");
+        let breathedCount = 0;
+
+        function initiate() {
+            document.getElementById("begin-btn").classList.add("fadeOut");
+            document.getElementById("begin-btn").disabled = "true";
+            document.getElementById("begin-btn").onclick = () => { };
+            setTimeout(() => {
+                document.getElementById("begin-btn").style.display = "none";
+                document.getElementById("screen").style.cursor = "none";
+
+                document.getElementById("screen").innerHTML = ``;
+
+                document.getElementById("screen").appendChild(breathingElem);
+
+                startBreathing();
+            }, 1200);
+        }
+
+        function startBreathing() {
+            breathe();
+            document.getElementById("bgm").volume = 0.2;
+            document.getElementById("bgm").play();
+        }
+
+        function breathe() {
+            breathingElem.textContent = "breathe in";
+            breathingElem.classList.replace("out", "in");
+            setTimeout(() => {
+                breathingElem.textContent = "hold...";
+            }, 3500);
+
+            setTimeout(() => {
+                breathingElem.textContent = "breathe out";
+                breathingElem.classList.replace("in", "out");
+                setTimeout(() => {
+                    breathingElem.textContent = "hold...";
+                }, 3500);
+                setTimeout(() => {
+                    breathedCount += 1;
+                    if (breathedCount >= 10) {
+                        document.getElementById("screen").style.display = "none";
+                        document.getElementById("done").style.display = "block";
+                    }
+                    else {
+                        breathedCount += 1;
+                        breathe();
+                    }
+                }, 7500)
+            }, 7000);
+        }
+
+    </script>
+</body>
+
+</html>
